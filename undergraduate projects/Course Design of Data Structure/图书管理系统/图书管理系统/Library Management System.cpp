@@ -2,38 +2,38 @@
 #include <cstdio>
 #include <cstring>
 #include <string>  
-#include <vector>                               //vector Ë³ĞòÈİÆ÷ ±ÈÊı×éÓÅÔ½ .at()·ÃÎÊ
-#include <algorithm>                            //Ä£°å¿â  
+#include <vector>                               //vector é¡ºåºå®¹å™¨ æ¯”æ•°ç»„ä¼˜è¶Š .at()è®¿é—®
+#include <algorithm>                            //æ¨¡æ¿åº“  
 #include <fstream>
-#include <cctype>                               //×Ö·û´¦Àí¿â   ×Ö·û²âÊÔ¡¢Ó³Éä
-#include <iomanip>                              //Á÷²Ù×÷·ûÍ·ÎÄ¼ş
+#include <cctype>                               //å­—ç¬¦å¤„ç†åº“   å­—ç¬¦æµ‹è¯•ã€æ˜ å°„
+#include <iomanip>                              //æµæ“ä½œç¬¦å¤´æ–‡ä»¶
 using namespace std;
 struct student
 {
 	static int s1;
-	int id;//¶ÁÕß±àºÅ
-	string name;//¶ÁÕßĞÕÃû
-	int borrowsum;//ÄãÒÑ½èÔÄ¶àÉÙ±¾Êé,Ä¬ÈÏÎª0
-	int number;//ÏÖÔÚ»¹ÓĞ¶àÉÙ±¾ÊéÎ´»¹£¬Ä¬ÈÏÎª0
-	string borrowday;//ÉÏ´Î½èÔÄÊ±¼ä£¬Ä¬ÈÏÎª0000.00.00
-	int b[10];//ÄãËù½èÊéµÄµÄ±àºÅ£¬×î¶à10±¾
+	int id;//è¯»è€…ç¼–å·
+	string name;//è¯»è€…å§“å
+	int borrowsum;//ä½ å·²å€Ÿé˜…å¤šå°‘æœ¬ä¹¦,é»˜è®¤ä¸º0
+	int number;//ç°åœ¨è¿˜æœ‰å¤šå°‘æœ¬ä¹¦æœªè¿˜ï¼Œé»˜è®¤ä¸º0
+	string borrowday;//ä¸Šæ¬¡å€Ÿé˜…æ—¶é—´ï¼Œé»˜è®¤ä¸º0000.00.00
+	int b[10];//ä½ æ‰€å€Ÿä¹¦çš„çš„ç¼–å·ï¼Œæœ€å¤š10æœ¬
 	//char bookname[100];
 	string bookname;
 	string authorname;
 };
 struct book
 {
-	int idnum;//Í¼Êé±àºÅºÅ
-	int BorrowCount;//Í¼Êé½èÔÄÁ¿,³õÊ¼»¯Îª0
-	string name;//ÊéÃû
-	string kind;//Í¼ÊéÖÖÀà
-	double price;//Í¼Êé¼Û¸ñ
-	int sum;//Í¼Êé×Ü¿â´æ´æÁ¿
-	int nowsum;//Í¼ÊéÏÖ¿â´æÁ¿
-	string author;//Í¼Êé×÷Õß
-	bool ok;//ÊÇ·ñ¿É½è,³õÊ¼Îª¿ÉÒÔ
-	string borrowdate;//Í¼Êé×î½üÒ»´Î½è³öÊ±¼ä£¬Ä¬ÈÏÎª0000-00-00£»
-	string returndate;//Í¼Êé×î½üÒ»´Î¹é»¹Ê±¼ä£¬Ä¬ÈÏÎª0000-00-00£»
+	int idnum;//å›¾ä¹¦ç¼–å·å·
+	int BorrowCount;//å›¾ä¹¦å€Ÿé˜…é‡,åˆå§‹åŒ–ä¸º0
+	string name;//ä¹¦å
+	string kind;//å›¾ä¹¦ç§ç±»
+	double price;//å›¾ä¹¦ä»·æ ¼
+	int sum;//å›¾ä¹¦æ€»åº“å­˜å­˜é‡
+	int nowsum;//å›¾ä¹¦ç°åº“å­˜é‡
+	string author;//å›¾ä¹¦ä½œè€…
+	bool ok;//æ˜¯å¦å¯å€Ÿ,åˆå§‹ä¸ºå¯ä»¥
+	string borrowdate;//å›¾ä¹¦æœ€è¿‘ä¸€æ¬¡å€Ÿå‡ºæ—¶é—´ï¼Œé»˜è®¤ä¸º0000-00-00ï¼›
+	string returndate;//å›¾ä¹¦æœ€è¿‘ä¸€æ¬¡å½’è¿˜æ—¶é—´ï¼Œé»˜è®¤ä¸º0000-00-00ï¼›
 };
 bool cmpByidnum(book a, book b)
 {
@@ -56,27 +56,27 @@ class Library
 private:
 	vector<book> data;
 	vector<student> data1;
-	vector<int> betoli;//Ô¤Ô¼Êéµ½¹İ£¬´¢´æÆä±àºÅ
+	vector<int> betoli;//é¢„çº¦ä¹¦åˆ°é¦†ï¼Œå‚¨å­˜å…¶ç¼–å·
 public:
 	Library();
-	void AddBook(book NewBook);  //Ôö¼ÓÍ¼Êé
-	void DeleteBook(string bookname, string author);//É¾³ıÍ¼Êé
-	void BorrowBook(string name, string author);//½èÔÄÍ¼Êé
-	void BackBook(string name, string author, int k);//¹é»¹Í¼Êé
-	void ShowAllBook(); //Êä³öÏµÍ³ËùÓĞÍ¼Êé
-	void SearchBookPosWithNum(int theauthor);//°´±àºÅ²éÑ¯
-	void  SearchBookPosWithname(string thebook); //°´ÊéÃû²éÑ¯
-	void  SearchBookPosWithAuthor(string theauthor);//°´×÷Õß²éÑ¯
-	void  SearchBookPosWithKind(string kind);//°´ÖÖÀà²éÑ¯
-	int  SearchBookPosWithAB(string theauthor, string thebook);//°´×÷ÕßºÍÊéÃû²éÑ¯
-	void Save();  //´æÈëÍ¼Êé¹İÎÄ¼ş
-	void Save1();//´æÈëÑ§ÉúÎÄ¼ş
-	void printbook(book a);//Êä³öÄ³±¾ÊéµÄËùÓĞĞÅÏ¢
-	void revisebook(string name, string author);//ĞŞ¸ÄÄ³±¾ÊéµÄĞÅÏ¢
-	int SerchStudent(int id);//²éÑ¯Ä³¸ö¶ÁÕß
-	void AddStudent(student a);//Ôö¼ÓÒ»¸ö¶ÁÕß
-	void PrintStudent(int kid);//Êä³ö¶ÁÕßĞÅÏ¢
-	int GetStudent();//·µ»Ø¶ÁÕß×ÜÊı
+	void AddBook(book NewBook);  //å¢åŠ å›¾ä¹¦
+	void DeleteBook(string bookname, string author);//åˆ é™¤å›¾ä¹¦
+	void BorrowBook(string name, string author);//å€Ÿé˜…å›¾ä¹¦
+	void BackBook(string name, string author, int k);//å½’è¿˜å›¾ä¹¦
+	void ShowAllBook(); //è¾“å‡ºç³»ç»Ÿæ‰€æœ‰å›¾ä¹¦
+	void SearchBookPosWithNum(int theauthor);//æŒ‰ç¼–å·æŸ¥è¯¢
+	void  SearchBookPosWithname(string thebook); //æŒ‰ä¹¦åæŸ¥è¯¢
+	void  SearchBookPosWithAuthor(string theauthor);//æŒ‰ä½œè€…æŸ¥è¯¢
+	void  SearchBookPosWithKind(string kind);//æŒ‰ç§ç±»æŸ¥è¯¢
+	int  SearchBookPosWithAB(string theauthor, string thebook);//æŒ‰ä½œè€…å’Œä¹¦åæŸ¥è¯¢
+	void Save();  //å­˜å…¥å›¾ä¹¦é¦†æ–‡ä»¶
+	void Save1();//å­˜å…¥å­¦ç”Ÿæ–‡ä»¶
+	void printbook(book a);//è¾“å‡ºæŸæœ¬ä¹¦çš„æ‰€æœ‰ä¿¡æ¯
+	void revisebook(string name, string author);//ä¿®æ”¹æŸæœ¬ä¹¦çš„ä¿¡æ¯
+	int SerchStudent(int id);//æŸ¥è¯¢æŸä¸ªè¯»è€…
+	void AddStudent(student a);//å¢åŠ ä¸€ä¸ªè¯»è€…
+	void PrintStudent(int kid);//è¾“å‡ºè¯»è€…ä¿¡æ¯
+	int GetStudent();//è¿”å›è¯»è€…æ€»æ•°
 };
 Library::Library()
 {
@@ -89,7 +89,7 @@ Library::Library()
 		{
 			book tem;
 			fin >> tem.idnum >> tem.name >> tem.author >> tem.price >> tem.kind >> tem.sum >> tem.nowsum >> tem.BorrowCount >> tem.ok >> tem.borrowdate >> tem.returndate;
-			data.push_back(tem);              //Ìí¼ÓÔÚÊı×é×îºó
+			data.push_back(tem);              //æ·»åŠ åœ¨æ•°ç»„æœ€å
 		}
 		fin.close();
 	}
@@ -133,7 +133,7 @@ void Library::DeleteBook(string bookname, string author)
 		return;
 	}
 	else
-		cout << "²éÎŞ´ËÊé£¡\n";
+		cout << "æŸ¥æ— æ­¤ä¹¦ï¼\n";
 }
 void Library::BorrowBook(string name, string author)
 {
@@ -148,20 +148,20 @@ void Library::BorrowBook(string name, string author)
 		{
 			if (data[i].nowsum)
 			{
-				cout << "½èÊé¶ÁÕßµÄ¶ÁÕßºÅÊÇ£º";
+				cout << "å€Ÿä¹¦è¯»è€…çš„è¯»è€…å·æ˜¯ï¼š";
 				cin >> sid;
 				if (data1[sid - 1].number > 10)
 				{
-					cout << "ÏÖÄãÍ¬Ê±½èÁË10±¾Êé£¡²»¿ÉÔÙ½è£¡" << endl;
+					cout << "ç°ä½ åŒæ—¶å€Ÿäº†10æœ¬ä¹¦ï¼ä¸å¯å†å€Ÿï¼" << endl;
 					break;
 				}
 				flag = 1;
 				data[i].nowsum = data[i].nowsum - 1;
 				data[i].BorrowCount = data[i].BorrowCount + 1;
-				cout << "ÇëÊäÈë½èÔÄÈÕÆÚ" << endl;
+				cout << "è¯·è¾“å…¥å€Ÿé˜…æ—¥æœŸ" << endl;
 				cin >> BorrowDate;
 				data[i].borrowdate = BorrowDate;
-				cout << "ÇëÊäÈëÔ¤¼Æ¹é»¹ÈÕÆÚ" << endl;
+				cout << "è¯·è¾“å…¥é¢„è®¡å½’è¿˜æ—¥æœŸ" << endl;
 				cin >> BackDate;
 				data[i].returndate = BackDate;
 				data[i].ok = bool(data[i].nowsum);
@@ -175,22 +175,22 @@ void Library::BorrowBook(string name, string author)
 					Save();
 					Save1();
 				}
-				cout << "½èÔÄ³É¹¦" << endl;
+				cout << "å€Ÿé˜…æˆåŠŸ" << endl;
 			}
 			else
 			{
-				cout << "±§Ç¸Õâ±¾Êé¿â´æÎªÁã£¬ÎŞ·¨½èÔÄ" << endl;
+				cout << "æŠ±æ­‰è¿™æœ¬ä¹¦åº“å­˜ä¸ºé›¶ï¼Œæ— æ³•å€Ÿé˜…" << endl;
 			}
 		}
 	}
 	if (!flag)
-		cout << "±§Ç¸£¬Î´ÕÒµ½ÄúÒªÕÒµÄÊé¡£" << endl;
+		cout << "æŠ±æ­‰ï¼Œæœªæ‰¾åˆ°æ‚¨è¦æ‰¾çš„ä¹¦ã€‚" << endl;
 }
-void Library::BackBook(string name, string author, int k)//k±íÊ¾»¹ÊéÍ¾¾¶
+void Library::BackBook(string name, string author, int k)//kè¡¨ç¤ºè¿˜ä¹¦é€”å¾„
 {
 	int c = -1;
 	{
-		cout << "ÇëÊäÈëÄãµÄ¶ÁÕßºÅ£º";
+		cout << "è¯·è¾“å…¥ä½ çš„è¯»è€…å·ï¼š";
 		cin >> c;
 		c = c - 1;
 	}
@@ -211,22 +211,22 @@ void Library::BackBook(string name, string author, int k)//k±íÊ¾»¹ÊéÍ¾¾¶
 	}
 	Save();
 	Save1();
-	cout << "»¹Êé³É¹¦" << endl;
+	cout << "è¿˜ä¹¦æˆåŠŸ" << endl;
 }
 void Library::printbook(book a)
 {
 
-	cout << " ±àºÅ:" << setw(12) << a.idnum;
-	cout << " ÊéÃû:" << setw(14) << a.name;
-	cout << " ×÷Õß:" << setw(14) << a.author << endl;
-	cout << " ¼Û¸ñ:" << setw(14) << fixed << setprecision(2) << a.price;
-	cout << " ÖÖÀà:" << setw(14) << a.kind;
-	cout << " ×Ü¿â´æÁ¿:" << setw(10) << a.sum;
-	cout << " ÏÖ¿â´æÁ¿:" << setw(10) << a.nowsum;
-	cout << " Í¼Êé½èÔÄÁ¿:" << setw(14) << a.BorrowCount << endl;
-	cout << " ×´Ì¬:" << setw(14) << (a.ok == 0 ? "²»¿É½è" : "¿É½è");
-	cout << " ½üÆÚ½è³öÈÕÆÚ:" << setw(14) << a.borrowdate;
-	cout << " ½üÆÚ¹é»¹ÈÕÆÚ:" << setw(14) << a.returndate << endl;
+	cout << " ç¼–å·:" << setw(12) << a.idnum;
+	cout << " ä¹¦å:" << setw(14) << a.name;
+	cout << " ä½œè€…:" << setw(14) << a.author << endl;
+	cout << " ä»·æ ¼:" << setw(14) << fixed << setprecision(2) << a.price;
+	cout << " ç§ç±»:" << setw(14) << a.kind;
+	cout << " æ€»åº“å­˜é‡:" << setw(10) << a.sum;
+	cout << " ç°åº“å­˜é‡:" << setw(10) << a.nowsum;
+	cout << " å›¾ä¹¦å€Ÿé˜…é‡:" << setw(14) << a.BorrowCount << endl;
+	cout << " çŠ¶æ€:" << setw(14) << (a.ok == 0 ? "ä¸å¯å€Ÿ" : "å¯å€Ÿ");
+	cout << " è¿‘æœŸå€Ÿå‡ºæ—¥æœŸ:" << setw(14) << a.borrowdate;
+	cout << " è¿‘æœŸå½’è¿˜æ—¥æœŸ:" << setw(14) << a.returndate << endl;
 	cout << endl << endl;
 }
 void Library::PrintStudent(int kid)
@@ -239,8 +239,8 @@ void Library::PrintStudent(int kid)
 	{
 		
 		cout << "                 " << endl;
-		cout << "Äãµ±Ç°½èÁËÕâĞ©Êé£º\n";
-		cout << setw(16) << "±àºÅ" << setw(16) << "ÊéÃû" << setw(16) << "×÷Õß" << endl;
+		cout << "ä½ å½“å‰å€Ÿäº†è¿™äº›ä¹¦ï¼š\n";
+		cout << setw(16) << "ç¼–å·" << setw(16) << "ä¹¦å" << setw(16) << "ä½œè€…" << endl;
 		for (int i = 0; i < 1; i++)
 		{
 			
@@ -249,12 +249,12 @@ void Library::PrintStudent(int kid)
 		}
 	}
 	else
-		cout << "Äãµ±Ç°²¢Î´½èÈÎºÎÊé,¿ìÈ¥½è±¾Êé¿´¿´°É£¡\n";
+		cout << "ä½ å½“å‰å¹¶æœªå€Ÿä»»ä½•ä¹¦,å¿«å»å€Ÿæœ¬ä¹¦çœ‹çœ‹å§ï¼\n";
 }
 void Library::ShowAllBook()
 {
 	system("cls");
-	cout << "ËùÓĞÍ¼ÊéÎª:" << endl;
+	cout << "æ‰€æœ‰å›¾ä¹¦ä¸º:" << endl;
 	for (int i = 0; i < (int)data.size(); i++)
 	{
 		printbook(data[i]);
@@ -272,7 +272,7 @@ int Library::SerchStudent(int id)
 	}
 	return m;
 }
-void Library::SearchBookPosWithNum(int thenum)//°´±àºÅ²éÑ¯
+void Library::SearchBookPosWithNum(int thenum)//æŒ‰ç¼–å·æŸ¥è¯¢
 {
 	bool flag = false;
 	for (int i = 0; i < (int)data.size(); i++)
@@ -283,9 +283,9 @@ void Library::SearchBookPosWithNum(int thenum)//°´±àºÅ²éÑ¯
 			printbook(data[i]);
 		}
 	}
-	if (!flag) cout << "²éÎŞ´Ë±àºÅ£¡";
+	if (!flag) cout << "æŸ¥æ— æ­¤ç¼–å·ï¼";
 }
-void Library::SearchBookPosWithname(string thebook)//°´ÊéÃû²éÑ¯
+void Library::SearchBookPosWithname(string thebook)//æŒ‰ä¹¦åæŸ¥è¯¢
 {
 	int flag = 0;
 	for (int i = 0; i < (int)data.size(); i++)
@@ -296,9 +296,9 @@ void Library::SearchBookPosWithname(string thebook)//°´ÊéÃû²éÑ¯
 			flag = 1;
 		}
 	}
-	if (!flag) cout << "²éÎŞ´ËÊé£¡\n";
+	if (!flag) cout << "æŸ¥æ— æ­¤ä¹¦ï¼\n";
 }
-void Library::SearchBookPosWithAuthor(string theauthor)//°´×÷Õß²éÑ¯
+void Library::SearchBookPosWithAuthor(string theauthor)//æŒ‰ä½œè€…æŸ¥è¯¢
 {
 	bool flag = false;
 	for (int i = 0; i < (int)data.size(); i++)
@@ -309,9 +309,9 @@ void Library::SearchBookPosWithAuthor(string theauthor)//°´×÷Õß²éÑ¯
 			printbook(data[i]);
 		}
 	}
-	if (!flag) cout << "²éÎŞ´Ë×÷ÕßµÄÊé£¡";
+	if (!flag) cout << "æŸ¥æ— æ­¤ä½œè€…çš„ä¹¦ï¼";
 }
-void Library::SearchBookPosWithKind(string kind)//°´ÖÖÀà²éÑ¯
+void Library::SearchBookPosWithKind(string kind)//æŒ‰ç§ç±»æŸ¥è¯¢
 {
 	bool flag = false;
 	for (int i = 0; i < (int)data.size(); ++i)
@@ -322,9 +322,9 @@ void Library::SearchBookPosWithKind(string kind)//°´ÖÖÀà²éÑ¯
 			printbook(data[i]);
 		}
 	}
-	if (!flag) cout << "²éÎŞ´ËÀàÊé£¡";
+	if (!flag) cout << "æŸ¥æ— æ­¤ç±»ä¹¦ï¼";
 }
-int Library::SearchBookPosWithAB(string theauthor, string thebook)//°´×÷ÕßºÍÊéÃû²éÑ¯
+int Library::SearchBookPosWithAB(string theauthor, string thebook)//æŒ‰ä½œè€…å’Œä¹¦åæŸ¥è¯¢
 {
 	for (int i = 0; i < (int)data.size(); ++i)
 	{
@@ -334,10 +334,10 @@ int Library::SearchBookPosWithAB(string theauthor, string thebook)//°´×÷ÕßºÍÊéÃû
 			return i;
 		}
 	}
-	cout << "²éÎŞ´ËÊé£¡";
+	cout << "æŸ¥æ— æ­¤ä¹¦ï¼";
 	return -1;
 }
-void Library::Save() //´æÈëÊé¼®ÎÄ¼ş
+void Library::Save() //å­˜å…¥ä¹¦ç±æ–‡ä»¶
 {
 	ofstream fout("book.txt");
 	if (fout)
@@ -350,7 +350,7 @@ void Library::Save() //´æÈëÊé¼®ÎÄ¼ş
 		fout.close();
 	}
 }
-void Library::Save1() //´æÈëÑ§ÉúÎÄ¼ş
+void Library::Save1() //å­˜å…¥å­¦ç”Ÿæ–‡ä»¶
 {
 	ofstream fout("student.txt");
 	if (fout)
@@ -368,16 +368,16 @@ void Library::Save1() //´æÈëÑ§ÉúÎÄ¼ş
 		fout.close();
 	}
 }
-void Library::revisebook(string name, string author)//ĞŞ¸ÄÍ¼Êé
+void Library::revisebook(string name, string author)//ä¿®æ”¹å›¾ä¹¦
 {
 	Library mybook;
 	string  Kind;
 	int num1, num2, k = 0;
-	printf("ÄãÒªĞŞ¸ÄµÄÄÚÈİÊÇ£º\n");
-	printf("1.Í¼ÊéÏÖ¿â´æÁ¿ĞŞ¸Ä\n");
-	printf("2.Í¼Êé×Ü¿â´æÁ¿ĞŞ¸Ä\n");
-	printf("3.Í¼ÊéËùÊôÖÖÀàĞŞ¸Ä\n");
-	printf("4.ÍË³ö\n");
+	printf("ä½ è¦ä¿®æ”¹çš„å†…å®¹æ˜¯ï¼š\n");
+	printf("1.å›¾ä¹¦ç°åº“å­˜é‡ä¿®æ”¹\n");
+	printf("2.å›¾ä¹¦æ€»åº“å­˜é‡ä¿®æ”¹\n");
+	printf("3.å›¾ä¹¦æ‰€å±ç§ç±»ä¿®æ”¹\n");
+	printf("4.é€€å‡º\n");
 	for (int i = 0; i < (int)data.size(); i++)
 	{
 		if (data[i].author == author && data[i].name == name)
@@ -394,29 +394,29 @@ void Library::revisebook(string name, string author)//ĞŞ¸ÄÍ¼Êé
 		{
 		case 1:
 		{
-			cout << "ÇëÊäÈëĞÂµÄÏÖ¿â´æÁ¿£º\n";
+			cout << "è¯·è¾“å…¥æ–°çš„ç°åº“å­˜é‡ï¼š\n";
 			cin >> num1;
 			data[k].nowsum = num1;
 			Save();
-			cout << "ĞŞ¸Ä³É¹¦" << endl;
+			cout << "ä¿®æ”¹æˆåŠŸ" << endl;
 			break;
 		}
 		case 2:
 		{
-			cout << "ÇëÊäÈëĞÂµÄ×Ü¿â´æÁ¿£º\n";
+			cout << "è¯·è¾“å…¥æ–°çš„æ€»åº“å­˜é‡ï¼š\n";
 			cin >> num2;
 			data[k].sum = num2;
 			Save();
-			cout << "ĞŞ¸Ä³É¹¦" << endl;
+			cout << "ä¿®æ”¹æˆåŠŸ" << endl;
 			break;
 		}
 		case 3:
 		{
-			cout << "ÇëÊäÈëÍ¼ÊéËùÊôĞÂÖÖÀà£º\n";
+			cout << "è¯·è¾“å…¥å›¾ä¹¦æ‰€å±æ–°ç§ç±»ï¼š\n";
 			cin >> Kind;
 			data[k].kind = Kind;
 			Save();
-			cout << "ĞŞ¸Ä³É¹¦" << endl;
+			cout << "ä¿®æ”¹æˆåŠŸ" << endl;
 			break;
 		}
 		}
@@ -427,15 +427,15 @@ int main()
 {
 	cout.setf(ios::left);
 	Library mybook;
-	L1:cout << "************************** »¶Ó­Ê¹ÓÃ»ªÄÏÀí¹¤´óÑ§Í¼Êé¹ÜÀíÏµÍ³ **************************" << endl << endl;
-	cout << "ÇëÊäÈë¶ÁÕß±àºÅµÇÂ¼" << endl;
+	L1:cout << "************************** æ¬¢è¿ä½¿ç”¨åå—ç†å·¥å¤§å­¦å›¾ä¹¦ç®¡ç†ç³»ç»Ÿ **************************" << endl << endl;
+	cout << "è¯·è¾“å…¥è¯»è€…ç¼–å·ç™»å½•" << endl;
 	int mm = 510640;
 	int bh, k = 0, z = 0, cho;
 
 	cin >> bh;
 	if (bh == mm)
 	{
-		cout << "»¶Ó­Ê¹ÓÃ" << endl;
+		cout << "æ¬¢è¿ä½¿ç”¨" << endl;
 		k = 2;
 	}
 	else    z = 3;
@@ -443,17 +443,17 @@ int main()
 	if (k == 2) {
 		do
 		{
-		    L3:cout << "»¶Ó­½øÈë¹ÜÀíÔ±ÏµÍ³" << endl;
+		    L3:cout << "æ¬¢è¿è¿›å…¥ç®¡ç†å‘˜ç³»ç»Ÿ" << endl;
 			cin.clear();
 			cin.sync();
-			cout << " ***    1.Í¼ÊéÄ¿Â¼    ***" << endl;
-			cout << " ***    2.²éÑ¯Í¼Êé    ***" << endl;
-			cout << " ***    3.Ìí¼ÓÍ¼Êé    ***" << endl;
-			cout << " ***    4.É¾³ıÍ¼Êé    ***" << endl;
-			cout << " ***  5.ĞŞ¸ÄÍ¼ÊéĞÅÏ¢  ***" << endl;
-			cout << " ***      0.ÍË³ö      ***" << endl;
+			cout << " ***    1.å›¾ä¹¦ç›®å½•    ***" << endl;
+			cout << " ***    2.æŸ¥è¯¢å›¾ä¹¦    ***" << endl;
+			cout << " ***    3.æ·»åŠ å›¾ä¹¦    ***" << endl;
+			cout << " ***    4.åˆ é™¤å›¾ä¹¦    ***" << endl;
+			cout << " ***  5.ä¿®æ”¹å›¾ä¹¦ä¿¡æ¯  ***" << endl;
+			cout << " ***      0.é€€å‡º      ***" << endl;
 			cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
-			cout << "ÇëÑ¡Ôñ¹¦ÄÜ,ÊäÈëÖ¸Áî " << endl;
+			cout << "è¯·é€‰æ‹©åŠŸèƒ½,è¾“å…¥æŒ‡ä»¤ " << endl;
 			cin >> cho;
 			switch (cho)
 			{
@@ -470,12 +470,12 @@ int main()
 				int p1;
 				do
 				{
-					L2: cout << " ***       0.·µ»Ø       *** " << endl;
-					cout << " ***    1.°´ÊéÃû²éÑ¯    *** " << endl;
-					cout << " ***    2.°´×÷Õß²éÑ¯    *** " << endl;
-					cout << " ***    3.°´ÖÖÀà²éÑ¯    *** " << endl;
-					cout << " ***    4.°´±àºÅ²éÑ¯    *** " << endl;
-					cout << " *** ÇëÑ¡Ôñ¹¦ÄÜ,ÊäÈëÖ¸Áî *** " << endl;
+					L2: cout << " ***       0.è¿”å›       *** " << endl;
+					cout << " ***    1.æŒ‰ä¹¦åæŸ¥è¯¢    *** " << endl;
+					cout << " ***    2.æŒ‰ä½œè€…æŸ¥è¯¢    *** " << endl;
+					cout << " ***    3.æŒ‰ç§ç±»æŸ¥è¯¢    *** " << endl;
+					cout << " ***    4.æŒ‰ç¼–å·æŸ¥è¯¢    *** " << endl;
+					cout << " *** è¯·é€‰æ‹©åŠŸèƒ½,è¾“å…¥æŒ‡ä»¤ *** " << endl;
 					
 					string Name, Author, Kind;
 					int thenum;
@@ -488,30 +488,30 @@ int main()
 							{
 							case 1:do
 							{
-								cout << "ÇëÊäÈëÊéÃû£¡" << endl;
+								cout << "è¯·è¾“å…¥ä¹¦åï¼" << endl;
 								cin >> Name;
-								mybook.SearchBookPosWithname(Name); //°´ÊéÃû²éÑ¯
+								mybook.SearchBookPosWithname(Name); //æŒ‰ä¹¦åæŸ¥è¯¢
 								break;
 							} while (p1 != 0); break;
 							case 2:
 							{
-								cout << "ÇëÊäÈë×÷Õß£¡" << endl;
+								cout << "è¯·è¾“å…¥ä½œè€…ï¼" << endl;
 								cin >> Author;
-								mybook.SearchBookPosWithAuthor(Author);//°´×÷Õß²éÑ¯
+								mybook.SearchBookPosWithAuthor(Author);//æŒ‰ä½œè€…æŸ¥è¯¢
 								break;
 							}
 							case 3:
 							{
-								cout << "ÇëÊäÈëÖÖÀà£¡" << endl;
+								cout << "è¯·è¾“å…¥ç§ç±»ï¼" << endl;
 								cin >> Kind;
-								mybook.SearchBookPosWithKind(Kind);//°´ÖÖÀà²éÑ¯
+								mybook.SearchBookPosWithKind(Kind);//æŒ‰ç§ç±»æŸ¥è¯¢
 								break;
 							}
 							case 4:
 							{
-								cout << "ÇëÊäÈë±àºÅ£¡" << endl;
+								cout << "è¯·è¾“å…¥ç¼–å·ï¼" << endl;
 								cin >> thenum;
-								mybook.SearchBookPosWithNum(thenum);//°´±àºÅ²éÑ¯
+								mybook.SearchBookPosWithNum(thenum);//æŒ‰ç¼–å·æŸ¥è¯¢
 								break;
 							}
 							case 0:
@@ -527,7 +527,7 @@ int main()
 					else
 					{
 						cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-						cout << "!!!!!!!!!!ÇëÊäÈëÕıÈ·Ö¸Áî!!!!!!!!!!" << endl;
+						cout << "!!!!!!!!!!è¯·è¾“å…¥æ­£ç¡®æŒ‡ä»¤!!!!!!!!!!" << endl;
 						cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
 						break;
 					}
@@ -536,22 +536,22 @@ int main()
 				goto L2;
 				break;
 			}
-			case 3:         //Ôö¼ÓÍ¼Êé
+			case 3:         //å¢åŠ å›¾ä¹¦
 			{
 				book temp;
 				cin.clear();
 				cin.sync();
-				cout << "±àºÅ:";
+				cout << "ç¼–å·:";
 				cin >> temp.idnum;
-				cout << "ÊéÃû:";
+				cout << "ä¹¦å:";
 				cin >> temp.name;
-				cout << "×÷Õß£º";
+				cout << "ä½œè€…ï¼š";
 				cin >> temp.author;
-				cout << "¼Û¸ñ:";
+				cout << "ä»·æ ¼:";
 				cin >> temp.price;
-				cout << "ÖÖÀà:";
+				cout << "ç§ç±»:";
 				cin >> temp.kind;
-				cout << "ÊıÁ¿:";
+				cout << "æ•°é‡:";
 				cin >> temp.sum;
 				temp.nowsum = temp.sum;
 				temp.BorrowCount = 0;
@@ -560,21 +560,21 @@ int main()
 				temp.returndate = "0000.00.00";
 				mybook.AddBook(temp);
 				mybook.Save();
-				cout << "ĞÅÏ¢±£´æ³É¹¦" << endl;
+				cout << "ä¿¡æ¯ä¿å­˜æˆåŠŸ" << endl;
 				break;
 			}
-			case 4:         //É¾³ıÍ¼Êé
+			case 4:         //åˆ é™¤å›¾ä¹¦
 			{
 				string bookname, bookauthor;
-				cout << "ÇëÊäÈëÊéÃûºÍ×÷Õß:" << endl;
+				cout << "è¯·è¾“å…¥ä¹¦åå’Œä½œè€…:" << endl;
 				cin >> bookname >> bookauthor;
 				mybook.DeleteBook(bookname, bookauthor);
 				break;
 			}
-			case 5://ĞŞ¸ÄÍ¼ÊéĞÅÏ¢
+			case 5://ä¿®æ”¹å›¾ä¹¦ä¿¡æ¯
 			{
 				string name, author;
-				cout << "ÇëÊäÈëÒªĞŞ¸ÄµÄÊéÃûºÍ×÷Õß£º" << endl;
+				cout << "è¯·è¾“å…¥è¦ä¿®æ”¹çš„ä¹¦åå’Œä½œè€…ï¼š" << endl;
 				cin >> name >> author;
 				mybook.revisebook(name, author);
 				break;
@@ -587,7 +587,7 @@ int main()
 		} while (cho >= 1 && cho <= 5);
 		{
 			cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-			cout << "!!!!!!!!!!ÇëÊäÈëÕıÈ·Ö¸Áî!!!!!!!!!!" << endl;
+			cout << "!!!!!!!!!!è¯·è¾“å…¥æ­£ç¡®æŒ‡ä»¤!!!!!!!!!!" << endl;
 			cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
 			system("pause");
 		}
@@ -600,14 +600,14 @@ int main()
 		if (mybook.SerchStudent(bh) == -1)
 		{
 			int n;
-			cout << "Äã²»ÊÇ´ËÏµÍ³¶ÁÕß£¬ÊÇ·ñ×¢²á£¿\n";
-			cout << "                    1.×¢²á\n";
-			cout << "                    2.²»ĞèÒª\n";
+			cout << "ä½ ä¸æ˜¯æ­¤ç³»ç»Ÿè¯»è€…ï¼Œæ˜¯å¦æ³¨å†Œï¼Ÿ\n";
+			cout << "                    1.æ³¨å†Œ\n";
+			cout << "                    2.ä¸éœ€è¦\n";
 			cin >> n;
 			student temp;
 			if (n == 1)
 			{
-				cout << "ÇëÊäÈëÄãµÄĞÕÃû:";
+				cout << "è¯·è¾“å…¥ä½ çš„å§“å:";
 				cin >> temp.name;
 				cin.clear();
 				cin.sync();
@@ -621,32 +621,32 @@ int main()
 				}
 				mybook.AddStudent(temp);
 				mybook.Save1();
-				cout << "                ×¢²á³É¹¦£¡Çë¼Ç×¡ÄãµÄ¶ÁÕßºÅ£¬ÈôÍü¼ÇÇëÁªÏµ¹ÜÀíÔ±!\n";
-				cout << "                ĞÕÃû:" << temp.name << endl;
-				cout << "                ¶ÁÕßºÅ£º" << temp.id << endl;
+				cout << "                æ³¨å†ŒæˆåŠŸï¼è¯·è®°ä½ä½ çš„è¯»è€…å·ï¼Œè‹¥å¿˜è®°è¯·è”ç³»ç®¡ç†å‘˜!\n";
+				cout << "                å§“å:" << temp.name << endl;
+				cout << "                è¯»è€…å·ï¼š" << temp.id << endl;
 				k = temp.id;
 				do
 				{
 
 					cin.clear();
 					cin.sync();
-					L7:cout << "***    0.·µ»Ø    ***" << endl;
-					cout << "***  1.²éÑ¯Í¼Êé  ***" << endl;
-					cout << "***  2.½èÔÄÍ¼Êé  ***" << endl;
-					cout << "***  3.¹é»¹Í¼Êé  ***" << endl;
-					cout << "***4.²éÑ¯¶ÁÕßĞÅÏ¢***" << endl;
-					cout << "***ÇëÑ¡Ôñ¹¦ÄÜ,ÊäÈëÖ¸Áî***" << endl;
+					L7:cout << "***    0.è¿”å›    ***" << endl;
+					cout << "***  1.æŸ¥è¯¢å›¾ä¹¦  ***" << endl;
+					cout << "***  2.å€Ÿé˜…å›¾ä¹¦  ***" << endl;
+					cout << "***  3.å½’è¿˜å›¾ä¹¦  ***" << endl;
+					cout << "***4.æŸ¥è¯¢è¯»è€…ä¿¡æ¯***" << endl;
+					cout << "***è¯·é€‰æ‹©åŠŸèƒ½,è¾“å…¥æŒ‡ä»¤***" << endl;
 					cin >> cho;
 					int thenum;
 					switch (cho)
 					{
 					case 1:
-					{   L6:cout << " ***    0.·µ»Ø    *** " << endl;
-					cout << " *** 1.°´ÊéÃû²éÑ¯ *** " << endl;
-					cout << " *** 2.°´×÷Õß²éÑ¯ *** " << endl;
-					cout << " *** 3.°´ÖÖÀà²éÑ¯ *** " << endl;
-					cout << " *** 4.°´±àºÅ²éÑ¯ *** " << endl;
-					cout << " *** ÇëÑ¡Ôñ¹¦ÄÜ,ÊäÈëÖ¸Áî *** " << endl;
+					{   L6:cout << " ***    0.è¿”å›    *** " << endl;
+					cout << " *** 1.æŒ‰ä¹¦åæŸ¥è¯¢ *** " << endl;
+					cout << " *** 2.æŒ‰ä½œè€…æŸ¥è¯¢ *** " << endl;
+					cout << " *** 3.æŒ‰ç§ç±»æŸ¥è¯¢ *** " << endl;
+					cout << " *** 4.æŒ‰ç¼–å·æŸ¥è¯¢ *** " << endl;
+					cout << " *** è¯·é€‰æ‹©åŠŸèƒ½,è¾“å…¥æŒ‡ä»¤ *** " << endl;
 					int p1;
 					string Name, Author, Kind;
 					cin >> p1;
@@ -658,30 +658,30 @@ int main()
 							{
 							case 1:do
 							{
-								cout << "ÇëÊäÈëÊéÃû£¡" << endl;
+								cout << "è¯·è¾“å…¥ä¹¦åï¼" << endl;
 								cin >> Name;
-								mybook.SearchBookPosWithname(Name); //°´ÊéÃû²éÑ¯
+								mybook.SearchBookPosWithname(Name); //æŒ‰ä¹¦åæŸ¥è¯¢
 								break;
 							} while (p1 != 0); break;
 							case 2:
 							{
-								cout << "ÇëÊäÈë×÷Õß£¡" << endl;
+								cout << "è¯·è¾“å…¥ä½œè€…ï¼" << endl;
 								cin >> Author;
-								mybook.SearchBookPosWithAuthor(Author);//°´×÷Õß²éÑ¯
+								mybook.SearchBookPosWithAuthor(Author);//æŒ‰ä½œè€…æŸ¥è¯¢
 								break;
 							}
 							case 3:
 							{
-								cout << "ÇëÊäÈëÖÖÀà£¡" << endl;
+								cout << "è¯·è¾“å…¥ç§ç±»ï¼" << endl;
 								cin >> Kind;
-								mybook.SearchBookPosWithKind(Kind);//°´ÖÖÀà²éÑ¯
+								mybook.SearchBookPosWithKind(Kind);//æŒ‰ç§ç±»æŸ¥è¯¢
 								break;
 							}
 							case 4:
 							{
-								cout << "ÇëÊäÈë±àºÅ£¡" << endl;
+								cout << "è¯·è¾“å…¥ç¼–å·ï¼" << endl;
 								cin >> thenum;
-								mybook.SearchBookPosWithNum(thenum);//°´±àºÅ²éÑ¯
+								mybook.SearchBookPosWithNum(thenum);//æŒ‰ç¼–å·æŸ¥è¯¢
 								break;
 							}
 							case 0:
@@ -696,7 +696,7 @@ int main()
 					else
 					{
 						cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-						cout << "!!!!!!!!!!ÇëÊäÈëÕıÈ·Ö¸Áî!!!!!!!!!!" << endl;
+						cout << "!!!!!!!!!!è¯·è¾“å…¥æ­£ç¡®æŒ‡ä»¤!!!!!!!!!!" << endl;
 						cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
 						break;
 					}
@@ -706,7 +706,7 @@ int main()
 					case 2:
 					{
 						string bookname, bookauthor;
-						cout << "ÇëÊäÈëÒª½èµÄÊéÃûºÍ×÷Õß£º" << endl;
+						cout << "è¯·è¾“å…¥è¦å€Ÿçš„ä¹¦åå’Œä½œè€…ï¼š" << endl;
 						cin >> bookname >> bookauthor;
 						mybook.BorrowBook(bookname, bookauthor);
 						mybook.Save();
@@ -716,7 +716,7 @@ int main()
 					case 3:
 					{
 						string bookname, bookauthor;
-						cout << "ÇëÊäÈëÒª»¹µÄÊéÃûºÍ×÷Õß£º" << endl;
+						cout << "è¯·è¾“å…¥è¦è¿˜çš„ä¹¦åå’Œä½œè€…ï¼š" << endl;
 						cin >> bookname >> bookauthor;
 						mybook.BackBook(bookname, bookauthor, -1);
 						mybook.Save();
@@ -725,7 +725,7 @@ int main()
 					}
 					case 4:
 					{
-						cout << setw(8) << "¶ÁÕßºÅ" << setw(8) << "ĞÕÃû"<< setw(8) << "ÏÖÔÚ½èÔÄÊé¸öÊı" << endl;
+						cout << setw(8) << "è¯»è€…å·" << setw(8) << "å§“å"<< setw(8) << "ç°åœ¨å€Ÿé˜…ä¹¦ä¸ªæ•°" << endl;
 						mybook.PrintStudent(k);
 						system("pause");
 						break;
@@ -737,7 +737,7 @@ int main()
 					}
 				} while (cho >= 1 && cho <= 4);
 				{cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-				cout << "!!!!!!!!!!ÇëÊäÈëÕıÈ·Ö¸Áî!!!!!!!!!!" << endl;
+				cout << "!!!!!!!!!!è¯·è¾“å…¥æ­£ç¡®æŒ‡ä»¤!!!!!!!!!!" << endl;
 				cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
 				system("pause");
 				}
@@ -759,22 +759,22 @@ int main()
 
 			cin.clear();
 			cin.sync();
-			L5:cout << "***    0.ÍË³ö    ***" << endl;
-			cout << "***  1.²éÑ¯Í¼Êé  ***" << endl;
-			cout << "***  2.½èÔÄÍ¼Êé  ***" << endl;
-			cout << "***  3.¹é»¹Í¼Êé  ***" << endl;
-			cout << "***4.²éÑ¯¶ÁÕßĞÅÏ¢***" << endl;
-			cout << "***ÇëÑ¡Ôñ¹¦ÄÜ,ÊäÈëÖ¸Áî***" << endl;
+			L5:cout << "***    0.é€€å‡º    ***" << endl;
+			cout << "***  1.æŸ¥è¯¢å›¾ä¹¦  ***" << endl;
+			cout << "***  2.å€Ÿé˜…å›¾ä¹¦  ***" << endl;
+			cout << "***  3.å½’è¿˜å›¾ä¹¦  ***" << endl;
+			cout << "***4.æŸ¥è¯¢è¯»è€…ä¿¡æ¯***" << endl;
+			cout << "***è¯·é€‰æ‹©åŠŸèƒ½,è¾“å…¥æŒ‡ä»¤***" << endl;
 			cin >> cho;
 			switch (cho)
 			{
 			case 1:
-			{   L4:cout << " ***    0.·µ»Ø    *** " << endl;
-			cout << " *** 1.°´ÊéÃû²éÑ¯ *** " << endl;
-			cout << " *** 2.°´×÷Õß²éÑ¯ *** " << endl;
-			cout << " *** 3.°´ÖÖÀà²éÑ¯ *** " << endl;
-			cout << " *** 4.°´±àºÅ²éÑ¯ *** " << endl;
-			cout << " *** ÇëÑ¡Ôñ¹¦ÄÜ,ÊäÈëÖ¸Áî *** " << endl;
+			{   L4:cout << " ***    0.è¿”å›    *** " << endl;
+			cout << " *** 1.æŒ‰ä¹¦åæŸ¥è¯¢ *** " << endl;
+			cout << " *** 2.æŒ‰ä½œè€…æŸ¥è¯¢ *** " << endl;
+			cout << " *** 3.æŒ‰ç§ç±»æŸ¥è¯¢ *** " << endl;
+			cout << " *** 4.æŒ‰ç¼–å·æŸ¥è¯¢ *** " << endl;
+			cout << " *** è¯·é€‰æ‹©åŠŸèƒ½,è¾“å…¥æŒ‡ä»¤ *** " << endl;
 			int p1;
 			string Name, Author, Kind;
 			int thenum;
@@ -787,30 +787,30 @@ int main()
 					{
 					case 1:do
 					{
-						cout << "ÇëÊäÈëÊéÃû£¡" << endl;
+						cout << "è¯·è¾“å…¥ä¹¦åï¼" << endl;
 						cin >> Name;
-						mybook.SearchBookPosWithname(Name); //°´ÊéÃû²éÑ¯
+						mybook.SearchBookPosWithname(Name); //æŒ‰ä¹¦åæŸ¥è¯¢
 						break;
 					} while (p1 != 0); break;
 					case 2:
 					{
-						cout << "ÇëÊäÈë×÷Õß£¡" << endl;
+						cout << "è¯·è¾“å…¥ä½œè€…ï¼" << endl;
 						cin >> Author;
-						mybook.SearchBookPosWithAuthor(Author);//°´×÷Õß²éÑ¯
+						mybook.SearchBookPosWithAuthor(Author);//æŒ‰ä½œè€…æŸ¥è¯¢
 						break;
 					}
 					case 3:
 					{
-						cout << "ÇëÊäÈëÖÖÀà£¡" << endl;
+						cout << "è¯·è¾“å…¥ç§ç±»ï¼" << endl;
 						cin >> Kind;
-						mybook.SearchBookPosWithKind(Kind);//°´ÖÖÀà²éÑ¯
+						mybook.SearchBookPosWithKind(Kind);//æŒ‰ç§ç±»æŸ¥è¯¢
 						break;
 					}
 					case 4:
 					{
-						cout << "ÇëÊäÈë±àºÅ£¡" << endl;
+						cout << "è¯·è¾“å…¥ç¼–å·ï¼" << endl;
 						cin >> thenum;
-						mybook.SearchBookPosWithNum(thenum);//°´±àºÅ²éÑ¯
+						mybook.SearchBookPosWithNum(thenum);//æŒ‰ç¼–å·æŸ¥è¯¢
 						break;
 					}
 					case 0:
@@ -826,7 +826,7 @@ int main()
 			else
 			{
 				cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-				cout << "!!!!!!!!!!ÇëÊäÈëÕıÈ·Ö¸Áî!!!!!!!!!!" << endl;
+				cout << "!!!!!!!!!!è¯·è¾“å…¥æ­£ç¡®æŒ‡ä»¤!!!!!!!!!!" << endl;
 				cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
 				break;
 			}
@@ -836,7 +836,7 @@ int main()
 			case 2:
 			{
 				string bookname, bookauthor;
-				cout << "ÇëÊäÈëÒª½èµÄÊéÃûºÍ×÷Õß£º" << endl;
+				cout << "è¯·è¾“å…¥è¦å€Ÿçš„ä¹¦åå’Œä½œè€…ï¼š" << endl;
 				cin >> bookname >> bookauthor;
 				mybook.BorrowBook(bookname, bookauthor);
 				mybook.Save();
@@ -846,7 +846,7 @@ int main()
 			case 3:
 			{
 				string bookname, bookauthor;
-				cout << "ÇëÊäÈëÒª»¹µÄÊéÃûºÍ×÷Õß£º" << endl;
+				cout << "è¯·è¾“å…¥è¦è¿˜çš„ä¹¦åå’Œä½œè€…ï¼š" << endl;
 				cin >> bookname >> bookauthor;
 				mybook.BackBook(bookname, bookauthor, -1);
 				mybook.Save();
@@ -855,7 +855,7 @@ int main()
 			}
 			case 4:
 			{
-				cout << setw(8) << "¶ÁÕßºÅ" << setw(8) << "ĞÕÃû" << setw(8) << "ÏÖÔÚ½èÔÄÊé¸öÊı" << endl;
+				cout << setw(8) << "è¯»è€…å·" << setw(8) << "å§“å" << setw(8) << "ç°åœ¨å€Ÿé˜…ä¹¦ä¸ªæ•°" << endl;
 				mybook.PrintStudent(k);
 				system("pause");
 				break;
@@ -865,7 +865,7 @@ int main()
 			}
 		} while (cho >= 1 && cho <= 4);
 		{cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-		cout << "!!!!!!!!!!ÇëÊäÈëÕıÈ·Ö¸Áî!!!!!!!!!!" << endl;
+		cout << "!!!!!!!!!!è¯·è¾“å…¥æ­£ç¡®æŒ‡ä»¤!!!!!!!!!!" << endl;
 		cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
 		system("pause");
 		}
