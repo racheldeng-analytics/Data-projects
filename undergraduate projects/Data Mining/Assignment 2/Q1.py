@@ -57,4 +57,5 @@ for C, color in zip(Cs, colors):
                facecolors='none', edgecolors=color)
 
 plt.legend()
+
 plt.show()
