@@ -30,4 +30,5 @@ def plotData(datasets, titles):
 n_samples = 1000
 datasets = generateData(n_samples)
 titles = ['Blobs', 'Circles', 'Moons', 'Blocks']
+
 plotData(datasets, titles)
