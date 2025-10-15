@@ -1,0 +1,136 @@
+---
+title: "Assignment 1 - MDA9159"
+author: 'Instructor: Dr. Guowen Huang'
+date: "Fall 2025"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+latex_engine: xelatex
+header-includes: \usepackage[fontsize=12pt]{scrextend}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+-\textbf{Student name: Rui Deng}
+
+-\textbf{Student number: 251509628}
+
+
+
+# Question 1
+
+## (a) Compute the mean and SD of salary
+```{R}
+data=read.table("p130.txt",header=TRUE)
+mean(data$S)
+sd(data$S)
+```
+
+Therefore, the mean of salary is 17270.2 and the standard deviation is 4716.632.
+
+## (b) Compute mean salary by education level
+```{R}
+aggregate(S~E, data=data, mean)
+```
+
+Therefore, the mean of salary of education level1 is 14941.5; the mean of salary of educaation level2 is 18286.37; the mean of salary of education level3 is 18292.85. From this, we can see that the higher education level is the higher salary might be.
+
+## (c) Draw a scatterplot of salary vs. experience, colored by education, faceted by management. Interpret the plot.
+```{R}
+data$E=factor(data$E, labels=c("High School","Colldge","Advanced"))
+data$M=factor(data$M,labels=c("Other","Manager"))
+library(ggplot2)
+ggplot(data, aes(x=X, y=S, col=E)) + 
+  geom_point() + 
+  facet_grid(~M) +
+  xlab("experience(years)") + 
+  ylab("salary")
+```
+
+From the picture, we can see that for the same education level as years of experience increase, salary also increases. With the same year of experience, the amount of salary is related to education level, but the highest is for education level2.
+
+# Question 2
+
+Fit a regression of salary on experience: S~X.
+
+## (a) Report the fitted regression line.
+```{R}
+ggplot(data, aes(x=X, y=S)) + 
+  geom_point() + 
+  geom_smooth(method="lm") + 
+  xlab("experience(years)") + 
+  ylab("salary")
+lmdata=lm(S~X, data=data)
+summary(lmdata)
+```
+
+## (b) Interpret the slope.
+From the output, we see that $\hat{S}$=491.5*X+1358.4. The intercept 491.5 means there is a positive relationship between salary and experience. When experence increases 1, salary will increase $491.5.
+
+## (c) What percent of salary variation is explained by experience?
+As adjusted $R^2$=0.2743, only 27% of salary variation is explained by experience. This is probably because experience alone explains only a small proportion of the variation in salary.This suggests that other factors may also play important roles in determining salary levels.
+
+# Question 3
+
+Fit the model S~X + Education (treat Education as a factor).
+
+## (a) Write the regression equation using dummy variables (reference = High School).
+```{R}
+lmmulti=lm(S~X+E, data=data)
+summary(lmmulti)
+```
+From the result we can see that adjusted $R^2$=0.4104, it is better than the model in question 2. But it's still low, the next step to improve the model will be to add in the factor of job position.
+
+## (b) Interpret the coefficient for College.
+E2 means the group of college. The coefficient of E2 is 3221.1, which means When X remains unchanged, the average salary of those with a College education is $3,221.10 higher than that of the High School group.
+
+
+## (c) Conduct an overall F-test for whether Education matters (i.e., all education-level effects = 0).
+Model: S=$\beta_0$+$\beta_1$D+
+$\beta_1$EColldge+
+$\beta_2$EAdvanced
+
+$H_0$: $\beta_1$=$\beta_2$=0
+
+$H_1$: one of $\beta_1$, $\beta_2$ is not 0
+```{R}
+anova_result=anova(lmdata, lmmulti)
+anova_result
+```
+From the result, we can see F=6.0816 and p value=0.00479<0.5, which means we reject the null hypothesis. So education has a statistically significant overall effect on salary after controlling for experience.
+
+# Question 4
+
+At 10 years of experience, predict mean salary and compute:
+
+## (a) a 95% confidence interval for the mean salary
+```{R}
+conf_interval=predict(lmmulti, newdata=data[data$X==10,],
+                      interval="confidence",level=0.95)
+conf_interval
+```
+
+## (b) a 95% prediction interval for a single individual
+```{R}
+pred_interval=predict(lmmulti,newdata=data[data$X==10,],
+                      interval="prediction",level=0.95)
+pred_interval
+```
+
+# Question 5
+
+## (a) Why do we drop one indicator when coding education with dummies?
+1. To avoid perfect multicollinearity. If all dummies are included, they would sum to 1 for every observation. So one dummy is exactly predictable from the others, creating perfect collinearity.
+2. By dropping one dummy, the intercept can represent the mean outcome for the dropped group.
+
+## (b) Explain (in words) why a prediction interval is wider than a confidence interval
+The prediction interval is wider because predicting one new observation includes both the uncertainty of estimating the mean and the natural variability of individual outcomes around that mean.
+
+
+
+
