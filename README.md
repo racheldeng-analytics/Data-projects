@@ -27,8 +27,8 @@ I enjoy transforming data into actionable strategies and developing solutions th
 
 ## 🛠️ Technical Skills
 **Languages:** Python, R, SQL, C++, MATLAB  
-**Data Analysis & ML:** pandas, NumPy, scikit-learn, statsmodels, ggplot2, tidyverse  
-**Visualization:** matplotlib, seaborn, Power BI, Tableau  
+**Data Analysis & ML:** pandas, NumPy, scikit-learn, statsmodels, ggplot2
+**Visualization:** matplotlib, seaborn 
 **Databases:** MySQL 
 **Tools:** Git, Jupyter Notebook, RStudio, Excel  
 **Concepts:** Regression, Classification, Time Series, Data Mining, Statistical Modeling, Optimization
