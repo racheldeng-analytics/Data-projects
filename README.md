@@ -48,10 +48,11 @@ I enjoy transforming data into actionable strategies and developing solutions th
 - Used **Python (pandas, statsmodels, matplotlib)** for data processing, model estimation, and diagnostics.
 - Conducted hypothesis testing and interval estimation, visualized results through regression plots.
 
-#### 3. Big Data Course Design
-- Applied distributed data processing and large-scale analytics concepts.
-- Designed and documented data workflows simulating **real-world big data pipelines**.
-- Showcased understanding of data storage, transformation, and analytical computation.
+#### 3. Graduate Project
+- Obtained population data information from government websites.
+- visualized and cleaned data in Python.
+- Built GM(1, 1) model to predict population changing trends in the future 5 years.
+- Built multiple linear regression to prove the relationship between population and the demand for life insurance.
 
 ---
 
