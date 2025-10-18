@@ -7,7 +7,6 @@ It demonstrates my skills in **data analysis, statistical modeling, machine lear
 ---
 
 ## 🧭 Table of Contents
-- [About Me](#about-me)
 - [Technical Skills](#technical-skills)
 - [Project Highlights](#project-highlights)
   - [Python Projects](#python-projects)
@@ -16,12 +15,6 @@ It demonstrates my skills in **data analysis, statistical modeling, machine lear
   - [MATLAB Projects](#matlab-projects)
 - [Contact](#contact)
 
----
-
-## 👩‍💻 About Me
-I am a **data analytics enthusiast** with strong quantitative, programming, and problem-solving skills.  
-My academic and project experience integrates **statistical theory**, **machine learning**, and **data engineering** to extract insights and support decision-making.  
-I enjoy transforming data into actionable strategies and developing solutions that combine analytical rigor with practical impact.
 
 ---
 
