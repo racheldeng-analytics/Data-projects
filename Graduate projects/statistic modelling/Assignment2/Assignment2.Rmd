@@ -1,0 +1,267 @@
+---
+title: "Assignment 2 - MDA9159"
+author: 'Instructor: Dr. Guowen Huang'
+date: "Fall 2025"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+latex_engine: xelatex
+header-includes: \usepackage[fontsize=12pt]{scrextend}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+-\textbf{Student name: Rui Deng}
+
+-\textbf{Student number: 251509628}
+
+
+
+# Question 1
+
+Polynomial regression (curvature in horsepower)
+
+Using mtcars, fit a quadratic model relating fuel economy to horsepower: mpg ~ hp + I($hp^2$)
+
+## (a) Report the fitted equation with estimated coefficients.
+```{R}
+data(mtcars)
+model_1 = lm(mpg ~ hp + I(hp^2), data = mtcars)
+summary(model_1)
+```
+We can get $\hat{mpg}$ = 40.41-0.2133ph+0.0004208$hp^2$ from the model. This means that fuel efficiency is modeled as a quadratic function of horsepower. For all the predictors, the p-value of the coefficients are less than 0.05, meaning they are significant. $R^2$=0.7561, it indicates the model explains about 75.6% of the variation of the model. 
+
+## (b) Is the relationship concave up or concave down? Justify from the fitted quadratic term.
+The coefficient of the squared term is positive, which means the curve is concave up. At first, as the horsepower increases, mpg decreases, but at higher horsepower level, the curve turns upward.
+
+## (c) Compute the horsepower at which predicted MPG is maximized (the vertex).
+```{R}
+b1 = coef(model_1)["hp"]
+b2 = coef(model_1)["I(hp^2)"]
+hp_vertex = -b1 / (2 * b2)
+hp_vertex
+```
+The turning point of a quadratic equation is $hp^* = -\frac{b}{2a}$. After substituting the numbers, we get 253.5, which means mpg is predicted to be lowest at around 253.5 horsepower.
+
+## (d) Using a nested-model F-test, test whether the quadratic term improves fit over the straight line mpg ~ hp at $\alpha$ = 0.05.
+```{R}
+model_2 = lm(mpg ~ hp, data = mtcars)
+anova(model_2, model_1)
+```
+The p-value of F-test is 0.000188924 < 0.05, which means the two models are significantly different. Hence the quadratic term improves fit over the straight line.
+
+# Question 2
+
+Interaction between weight and transmission
+
+Let am be a factor (0=automatic, 1=manual). Fit the interaction model: mpg ~ wt × am.
+
+## (a) Write the fitted equation.
+```{R}
+model_3 = lm(mpg ~ wt*am, data = mtcars)
+summary(model_3)
+```
+From the model, we get the fitted equation is $\hat{mpg}$=31.4161-3.7859*wt+14.8784*am-5.2984*($wt \times am$)
+
+## (b) Give the slope of wt for automatic and for manual cars.
+For automatic cars(am=0): $\hat{mpg}$=31.4161-3.7859*wt
+
+For manual cars(am=1): $\hat{mpg}$=(31.4161+14.8784)-(3.7859+5.2984)*wt
+
+## (c) Create an interaction plot with ggplot2 showing fitted lines for each transmission group. Briefly comment on whether slopes differ meaningfully.
+
+```{R}
+library(ggplot2)
+ggplot(mtcars, aes(x = wt, y = mpg, color = factor(am))) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, formula = y ~ x) +
+  labs(
+    x = "Weight (1000 lbs)",
+    y = "Miles per gallon",
+    color = "Transmission",
+    title = "Interaction Plot: MPG vs Weight by Transmission Type"
+  ) +
+  scale_color_manual(values = c("blue", "red"), labels = c("Automatic", "Manual"))
+```
+From the graph, we can see that the two fitted lines have noticeably different slopes, indicating that the effect of car weight on fuel economy depends on the transmission type.
+
+## (d) Using an appropriate test, assess whether the interaction is statistically significant at $\alpha$ = 0.05.
+
+```{R}
+model_4 = lm(mpg ~ wt+am, data = mtcars)
+anova(model_4, model_3)
+```
+From the result, we get the p-value of the F-test is 0.001017 < 0.05, which indicates the two models are significantly different. Hence, the interaction term improves model fit significantly.
+
+# Question 3
+Model diagnostics
+
+Fit the model: mpg ~ wt + hp + factor(cyl).
+
+## (a) Produce: Residuals-vs-Fitted, Normal Q-Q, Scale-Location, and Leverage/Cook’s distance plots.
+
+```{R}
+model_5 = lm(mpg ~ wt + hp + factor(cyl), data = mtcars)
+summary(model_5)
+par(mfrow = c(2,2))
+plot(model_5)
+```
+
+## (b) Comment on any non-linearity, heteroscedasticity, non-normality, or influential points you observe.
+
+The residuals show a slight curvature, suggesting potential non-linearity in the model. Most residuals are within a reasonable range, but there are a few influential outliers (e.g., Chrysler Imperial). The model may benefit from adding interaction terms or considering a non-linear approach.
+
+The Q-Q plot indicates that most residuals follow a normal distribution, but there are deviations in the tails, particularly on the right side. This suggests mild skewness and the presence of influential outliers, which may violate the normality assumption.
+
+The Scale-Location plot suggests heteroscedasticity, as residual variance increases at higher fitted values. This indicates that the assumption of constant variance is violated, and the model may require transformation or weighted regression.
+
+The Residuals vs Leverage plot reveals that most observations have low leverage and moderate residuals, but Maserati Bora shows high leverage and potential influence. Toyota Corolla and Chrysler Imperial also exhibit large residuals, suggesting they may affect model stability.
+
+## (c) Without using transformations, suggest a modeling remedy if you detect non-linearity.
+
+```{R}
+model_6 = lm(mpg ~ wt + I(wt^2) + hp + I(hp^2) + factor(cyl), data = mtcars)
+summary(model_6)
+```
+After considering quadratic terms, the fitted equation is: $\hat{mpg}$=49.12-8.77wt+0.783$wt^2$-0.096hp+0.0001727$hp^2$-0.595(6cyl)+0.33(8cyl). The p-value of coefficient of $wt^2$ is 0.03083 < 0.05, which indicates it is significant. $R^2$ of the model is 0.8931, higher than the original model, which means adding quadratic terms can improve the ability of the model to explain the data.
+
+# Question 4
+
+Outliers & influence
+
+For the model in Q3:
+
+## (a) Compute leverage (hatvalues), studentized residuals (rstudent), and Cook’s distance (cooks.distance).
+```{R}
+hii = hatvalues(model_5)
+ti = rstudent(model_5)
+Di = cooks.distance(model_5)
+influence_df = data.frame(
+  car = rownames(mtcars),
+  leverage = hii,
+  studentized_resid = ti,
+  cooksD = Di
+)
+head(influence_df[order(-influence_df$cooksD), ], 32)
+```
+
+## (b) State the common screening thresholds you use (e.g. hii > 2(p + 1)/n, |ti| > 2, Cook’s D > 1).
+1. Leverage(`hii`)
+
+Formula: `hii` > $\frac{2*(p+1)}{n}$, where p means the number of predictors and n means the sample size. Points with leverage above this threshold are considered high leverage and may disproportionately influence the model. 
+
+2. Studentized Residuals(`|ti|`)
+
+Observations with absolute studentized residuals greater than 2 are potential outliers in the response variable.
+
+3. Cook's Distance(`Di`)
+
+Observations with Cook’s Distance greater than 1 are considered highly influential on the fitted model.
+
+## (c) List the top three potentially influential observations and show their metrics.
+
+```{R}
+library(knitr)
+
+top3 <- data.frame(
+  Car = c("Chrysler Imperial", "Toyota Corolla", "Maserati Bora"),
+  Leverage = c(0.238, 0.116, 0.470),
+  Studentized = c(2.19, 2.59, 0.81),
+  CooksD = c(0.262, 0.145, 0.117)
+)
+kable(top3, caption = "The following table lists the top
+      three observations with the largest Cook’s distance,
+      along with their corresponding leverage (hii),
+      studentized residuals ($t_1$), and Cook’s distance
+      ($D_i$).", digits = 3, align = c("l", "r", "r", "r"))
+
+```
+
+
+Chrysler Imperial and Toyota Corolla have moderately large Cook’s D (> 0.125), suggesting they influence the fitted model somewhat.
+
+Maserati Bora has very high leverage but a relatively small residual, suggesting it strongly affects the fitted line.  
+
+## (d) Refit the model after removing the single most influential case. Compare key coefficients and standard errors; briefly discuss any substantive changes.
+
+```{R}
+mtcars_refit = mtcars[!rownames(mtcars) %in% "Chrysler Imperial", ]
+model5_refit = lm(mpg ~ wt + hp + factor(cyl), data = mtcars_refit)
+summary(model5_refit)
+
+comparison <- data.frame(
+  Original_Estimate = coef(model_5),
+  Refit_Estimate = coef(model5_refit),
+  Change_Percent = round((coef(model5_refit) - coef(model_5)) / coef(model_5) * 100, 1),
+  Original_SE = summary(model_5)$coefficients[, 2],
+  Refit_SE = summary(model5_refit)$coefficients[, 2]
+)
+knitr::kable(comparison, caption = "Comparison of
+             Coefficients Before and After Removing Chrysler
+             Imperial")
+
+model_metrics <- data.frame(
+  Metric = c("Residual SE", "Adjusted R²", "F-statistic"),
+  Original = c(
+    summary(model_5)$sigma,
+    summary(model_5)$adj.r.squared,
+    summary(model_5)$fstatistic[1]
+  ),
+  Refit = c(
+    summary(model5_refit)$sigma,
+    summary(model5_refit)$adj.r.squared,
+    summary(model5_refit)$fstatistic[1]
+  )
+)
+
+knitr::kable(model_metrics, caption = "Model Fit Comparison")
+```
+After removing Chrysler Imperial, the model fit improves slightly (Adjusted $R^2$: 0.836 to 0.857).
+The coefficient for wt becomes more negative (–3.18 to –3.85), suggesting stronger sensitivity of MPG to weight(wt).
+Standard errors remain similar, indicating that model stability is not severely affected.
+Overall, Chrysler Imperial was moderately influential, but its removal does not substantially alter the main conclusions of the model.
+
+# Question 5
+
+## (a) List the four standard linear-model assumptions.
+In multiple linear regression, we rely on four key assumptions:
+
+1. Linearity
+   The expected value of the response variable is a linear combination of predictors:  $E(Y|X) = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p$
+
+2. Independence
+   The residuals (errors) are independent of each other.  
+   This means there is no correlation between observations.
+
+3. Homoscedasticity (Constant Variance)  
+   The variance of the error term is constant across all levels of the predictors:  $Var(\varepsilon_i) = \sigma^2$
+
+4. Normality of Errors 
+   The residuals are normally distributed:  $\varepsilon_i \sim N(0, \sigma^2)$  
+   This assumption mainly affects hypothesis testing and confidence intervals.
+
+
+## (b) Differentiate internally studentized residuals vs externally studentized residuals residuals.
+1. Internally Studentized Residuals
+   - Computed as  $t_i = \dfrac{e_i}{s \sqrt{1 - h_{ii}}}$
+   - Here, $e_i$ is the residual, s is the standard error estimated from all data, and $h_{ii}$ is the leverage of observation i.  
+   - Each residual is scaled using the same overall variance estimate.  
+   - Useful for a quick standardized check but may underestimate large residuals.
+
+2. Externally Studentized Residuals 
+   - Computed as  $t_i = \dfrac{e_i}{s_{(i)} \sqrt{1 - h_{ii}}}$ 
+   - $s_{(i)}$ is the standard error estimated after removing observation i.  
+   - More accurate because the potentially influential point does not affect its own variance estimate.  
+   - Commonly used for detecting outliers and influential observations.
+
+3. Key Difference 
+   - The internal version includes the observation when estimating variance, while the external version leaves it out.  
+   - Externally studentized residuals are preferred when diagnosing influence or outlier effects.
+
+
+
